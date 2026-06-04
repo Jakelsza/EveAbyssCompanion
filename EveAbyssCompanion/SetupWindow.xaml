@@ -1,0 +1,155 @@
+<Window x:Class="EveAbyssCompanion.SetupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="EVE Abyss Companion — First Time Setup"
+        Width="560" Height="500"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#FF0B0F14"
+        Foreground="#FFF2F6FA">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="Accent"    Color="#FF33A6FF"/>
+        <SolidColorBrush x:Key="TextDim"   Color="#FFB7C3D0"/>
+        <SolidColorBrush x:Key="TextMain"  Color="#FFF2F6FA"/>
+        <SolidColorBrush x:Key="PanelBg"   Color="#FF111A26"/>
+        <SolidColorBrush x:Key="PanelBorder" Color="#FF2A3440"/>
+        <SolidColorBrush x:Key="Success"   Color="#FF4CFFB3"/>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextMain}"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="{StaticResource TextMain}"/>
+            <Setter Property="Background" Value="#FF151B22"/>
+            <Setter Property="BorderBrush" Value="#FF344252"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="14,6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF1E2732"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Foreground" Value="{StaticResource TextMain}"/>
+            <Setter Property="Background" Value="#FF0F141A"/>
+            <Setter Property="BorderBrush" Value="#FF344252"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="RadioButton">
+            <Setter Property="Foreground" Value="{StaticResource TextMain}"/>
+            <Setter Property="Margin" Value="0,4,0,4"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="EVE Abyss Companion" FontSize="20" FontWeight="Bold" Foreground="{StaticResource Accent}"/>
+            <TextBlock x:Name="StepLabel" Text="Step 1 of 3" FontSize="12" Foreground="{StaticResource TextDim}" Margin="0,4,0,0"/>
+            <Border Height="2" Background="{StaticResource Accent}" Margin="0,8,0,0" Opacity="0.4"/>
+        </StackPanel>
+
+        <!-- Step panels -->
+        <Grid Grid.Row="1">
+
+            <!-- Step 1: Welcome + Mode -->
+            <StackPanel x:Name="Step1Panel">
+                <TextBlock Text="Welcome! Let's set up your companion." FontSize="15" FontWeight="Bold" Margin="0,0,0,12"/>
+                <TextBlock TextWrapping="Wrap" Foreground="{StaticResource TextDim}" Margin="0,0,0,16"
+                           Text="This app tracks your abyss runs, detects NPCs automatically, and shows key info during runs. First, choose how you want to use it:"/>
+
+                <Border Background="{StaticResource PanelBg}" BorderBrush="{StaticResource PanelBorder}"
+                        BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,0,10">
+                    <StackPanel>
+                        <RadioButton x:Name="CockpitRadio" Content="🚀 Cockpit Mode — Single screen"
+                                     IsChecked="True" GroupName="mode" FontSize="13" FontWeight="SemiBold"/>
+                        <TextBlock TextWrapping="Wrap" Foreground="{StaticResource TextDim}" FontSize="11" Margin="20,2,0,0"
+                                   Text="EVE takes your whole screen. The overlay sits on top of EVE and is your only control point during runs. Main window is your between-runs dashboard."/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="{StaticResource PanelBg}" BorderBrush="{StaticResource PanelBorder}"
+                        BorderThickness="1" CornerRadius="8" Padding="16">
+                    <StackPanel>
+                        <RadioButton x:Name="StandardRadio" Content="🖥 Standard Mode — Dual screen"
+                                     GroupName="mode" FontSize="13" FontWeight="SemiBold"/>
+                        <TextBlock TextWrapping="Wrap" Foreground="{StaticResource TextDim}" FontSize="11" Margin="20,2,0,0"
+                                   Text="EVE on one screen, main window visible on the other. Full controls in both the main window and overlay. Best when you can see and click both screens at the same time."/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <!-- Step 2: EVE Log Folder -->
+            <StackPanel x:Name="Step2Panel" Visibility="Collapsed">
+                <TextBlock Text="EVE Combat Log Folder" FontSize="15" FontWeight="Bold" Margin="0,0,0,12"/>
+                <TextBlock TextWrapping="Wrap" Foreground="{StaticResource TextDim}" Margin="0,0,0,16"
+                           Text="The app reads EVE's combat logs to automatically detect NPCs during your runs. Point it to your EVE log folder below."/>
+
+                <TextBlock Text="Log folder path:" Foreground="{StaticResource TextDim}" Margin="0,0,0,6" FontSize="12"/>
+                <Grid Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="LogFolderBox" Height="32" VerticalContentAlignment="Center"/>
+                    <Button Grid.Column="1" Content="Browse" Margin="6,0,0,0" Height="32" Click="BrowseLogFolder_Click"/>
+                </Grid>
+
+                <CheckBox x:Name="EnableLogCheckBox" Content="Enable auto-detect NPCs from combat log"
+                          IsChecked="True" Foreground="{StaticResource TextMain}" Margin="0,0,0,8"/>
+
+                <Border Background="#111A1520" BorderBrush="{StaticResource PanelBorder}"
+                        BorderThickness="1" CornerRadius="6" Padding="12">
+                    <TextBlock TextWrapping="Wrap" Foreground="{StaticResource TextDim}" FontSize="11"
+                               Text="Default path: Documents\EVE\logs\Gamelogs&#10;If you use OneDrive or a custom install, browse to find your actual log folder."/>
+                </Border>
+            </StackPanel>
+
+            <!-- Step 3: Ready -->
+            <StackPanel x:Name="Step3Panel" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="✓" FontSize="48" Foreground="{StaticResource Success}" HorizontalAlignment="Center"/>
+                <TextBlock Text="You're ready to run the Abyss!" FontSize="16" FontWeight="Bold"
+                           HorizontalAlignment="Center" Margin="0,8,0,12"/>
+                <TextBlock TextWrapping="Wrap" Foreground="{StaticResource TextDim}" TextAlignment="Center"
+                           Text="Your settings are saved. You can change anything later in the options panel.&#10;&#10;Good luck out there, capsuleer. 🚀"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Navigation buttons -->
+        <Grid Grid.Row="2" Margin="0,16,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="BackButton" Grid.Column="1" Content="← Back" Margin="0,0,8,0"
+                    Click="Back_Click" Visibility="Collapsed"/>
+            <Button x:Name="NextButton" Grid.Column="2" Content="Next →" BorderBrush="{StaticResource Accent}"
+                    Click="Next_Click"/>
+        </Grid>
+    </Grid>
+</Window>
