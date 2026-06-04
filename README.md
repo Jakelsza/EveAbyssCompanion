@@ -2,7 +2,7 @@
 
 A free companion app for tracking Abyssal Deadspace runs in EVE Online.
 
-**v1.00.1 Beta** — Built by JakkelsZA
+**v1.0.0 Beta** — Built by JakkelsZA
 
 > **No memory reading. No game hooks. No ToS risk.** The app reads only your EVE Gamelog files — the same files EVE writes itself — and displays information in a separate window on top of EVE.
 
@@ -51,9 +51,12 @@ EVE Abyss Companion is a free desktop app that sits alongside EVE Online while y
 
 ## 3. Installation
 
-1. **Download the latest release** from the [GitHub releases page](../../releases/latest).
-2. Run **EveAbyssCompanion_Setup.exe**. The installer will handle everything.
-3. Launch **EVE Abyss Companion** from your Start Menu or Desktop shortcut.
+1. **Download the latest release** from the [GitHub releases page](https://github.com/Jakelsza/EveAbyssCompanion/releases/latest).
+2. **Extract the zip** into a fresh folder. Keep the folder named *EveAbyssCompanion*.
+3. **Run EveAbyssCompanion.exe** directly from the extracted folder. No installer needed.
+4. The Setup Wizard will open automatically on first launch.
+
+> **Always extract into a fresh folder.** Do not overwrite an old version in-place. Extract to a new folder, then delete the old one.
 
 ---
 
@@ -81,9 +84,11 @@ Click **Let's Go!**
 ## 5. Standard Mode vs Cockpit Mode
 
 ### Standard Mode — Two Screens
+
 Full workflow controls in the centre column of the main window.
 
 ### Cockpit Mode — Single Screen
+
 Run controls move to the overlay. Main window shows NPC Library, History, Stats, About. Click **Setup** on the overlay to bring the main window forward at any time.
 
 ---
@@ -203,7 +208,7 @@ Some NPCs carry multiple EWAR types — e.g. *Elite Lucifer Cynabal* shows both 
 | Stat | How it's calculated |
 |---|---|
 | **Best run** | Run with most time remaining — most efficient clear, not fastest clock |
-| **ISK/hour** | Total loot / total time including 60-second re-entry wait between runs |
+| **ISK/hour** | Total loot ÷ total time including 60-second re-entry wait between runs |
 
 ---
 
@@ -229,6 +234,16 @@ Some NPCs carry multiple EWAR types — e.g. *Elite Lucifer Cynabal* shows both 
 - A **gold border chip** = boss. Primary objective for that room.
 - Room **splits in History** show which room type takes you longest — identify where to improve.
 - The **best run stat** rewards efficient clears. Finishing with 12 minutes left beats squeaking through with 30 seconds.
+
+---
+
+## Support the Project
+
+The app is free and always will be. If it saves you ISK or time and you want to say thanks, any support is genuinely appreciated.
+
+- **Ko-fi:** [ko-fi.com/jakkelsza](https://ko-fi.com/jakkelsza)
+- **PayPal:** [paypal.me/JakkelsZA](https://paypal.me/JakkelsZA)
+- **Bitcoin:** 35U3rbr7XWAsi55KqUJDpRKoKB8PistGZv
 
 ---
 
