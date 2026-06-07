@@ -1,0 +1,327 @@
+<Window x:Class="EveAbyssCompanion.OverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:EveAbyssCompanion"
+        Title="Abyss Overlay"
+        Height="480"
+        Width="420"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Topmost="True"
+        ShowInTaskbar="False"
+        AllowsTransparency="True"
+        Background="Transparent">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="PanelBg"     Color="#BB0B0F14"/>
+        <SolidColorBrush x:Key="PanelBorder" Color="#FF2A3440"/>
+        <SolidColorBrush x:Key="TextDim"     Color="#FFB7C3D0"/>
+        <SolidColorBrush x:Key="TextMain"    Color="#FFF2F6FA"/>
+        <SolidColorBrush x:Key="BtnBg"       Color="#FF151B22"/>
+        <SolidColorBrush x:Key="BtnBorder"   Color="#FF344252"/>
+        <SolidColorBrush x:Key="BtnHover"    Color="#FF1E2732"/>
+        <SolidColorBrush x:Key="BtnPressed"  Color="#FF0E1217"/>
+        <SolidColorBrush x:Key="Accent"      Color="#FF33A6FF"/>
+        <SolidColorBrush x:Key="Danger"      Color="#FFFF5A5A"/>
+        <SolidColorBrush x:Key="Success"     Color="#FF4CFFB3"/>
+        <SolidColorBrush x:Key="Warning"     Color="#FFFFA040"/>
+        <SolidColorBrush x:Key="BossGold"    Color="#FFFFD700"/>
+
+        <!-- Ewar tag → colour converters -->
+        <local:OverlayTagToColourConverter x:Key="TagToColour"/>
+        <local:BossBorderConverter         x:Key="BossBorder"/>
+
+        <Style x:Key="OBtn" TargetType="Button">
+            <Setter Property="FontSize" Value="10.5"/>
+            <Setter Property="Foreground" Value="{StaticResource TextMain}"/>
+            <Setter Property="Background" Value="{StaticResource BtnBg}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BtnBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="MinHeight" Value="22"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,0"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource BtnHover}"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{StaticResource BtnPressed}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Button" BasedOn="{StaticResource OBtn}"/>
+
+        <Style x:Key="SubmitBtn" TargetType="Button" BasedOn="{StaticResource OBtn}">
+            <Setter Property="BorderBrush" Value="{StaticResource Success}"/>
+        </Style>
+
+        <Style x:Key="DangerBtn" TargetType="Button" BasedOn="{StaticResource OBtn}">
+            <Setter Property="BorderBrush" Value="{StaticResource Danger}"/>
+        </Style>
+
+        <Style x:Key="Lbl" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextDim}"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Margin" Value="0,0,0,3"/>
+        </Style>
+
+        <Style x:Key="SmallInput" TargetType="TextBox">
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Padding" Value="4,1"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="{StaticResource TextMain}"/>
+            <Setter Property="Background" Value="#FF0F141A"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BtnBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="Divider" TargetType="Border">
+            <Setter Property="Height" Value="1"/>
+            <Setter Property="Background" Value="{StaticResource PanelBorder}"/>
+            <Setter Property="Opacity" Value="0.6"/>
+            <Setter Property="Margin" Value="0,6,0,6"/>
+        </Style>
+    </Window.Resources>
+
+    <Border x:Name="RootBorder"
+            CornerRadius="10"
+            Background="{StaticResource PanelBg}"
+            BorderBrush="{StaticResource PanelBorder}"
+            BorderThickness="1"
+            Padding="10"
+            MouseLeftButtonDown="OverlayDrag">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- ===== DETECTED NPC PANEL (TOP) ===== -->
+            <Border Grid.Row="0" Background="#110D1520" BorderBrush="{StaticResource PanelBorder}"
+                    BorderThickness="1" CornerRadius="6" Padding="8,5" Margin="0,0,0,6">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Detected NPCs" Style="{StaticResource Lbl}" Margin="0,0,0,3"/>
+                        <ItemsControl x:Name="DetectedNpcList">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#1A2030"
+                                            BorderBrush="{Binding IsBoss, Converter={StaticResource BossBorder}}"
+                                            BorderThickness="2" CornerRadius="4" Padding="5,2" Margin="0,0,4,2">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontSize="10"
+                                                       Foreground="{StaticResource TextMain}"/>
+                                            <TextBlock Text=" — " FontSize="10" Foreground="{StaticResource TextDim}"/>
+                                            <TextBlock Text="{Binding PriorityDisplay}"
+                                                       FontSize="10"
+                                                       Foreground="{StaticResource TextMain}"/>
+                                            <!-- Ewar tags — each coloured individually -->
+                                            <ItemsControl ItemsSource="{Binding OverlayTags}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding}" FontSize="10"
+                                                                   Foreground="{Binding Converter={StaticResource TagToColour}}"
+                                                                   Margin="4,0,0,0"/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock x:Name="DetectedNpcStatus" Text="No NPCs detected yet."
+                                   Foreground="{StaticResource TextDim}" FontSize="9" TextWrapping="Wrap"/>
+                        <!-- Color legend -->
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <TextBlock Text="■ " Foreground="#FFD700" FontSize="9"/>
+                            <TextBlock Text="Neut  " Foreground="{StaticResource TextDim}" FontSize="9"/>
+                            <TextBlock Text="■ " Foreground="#FF5A5A" FontSize="9"/>
+                            <TextBlock Text="Scram  " Foreground="{StaticResource TextDim}" FontSize="9"/>
+                            <TextBlock Text="■ " Foreground="#FFA040" FontSize="9"/>
+                            <TextBlock Text="Web  " Foreground="{StaticResource TextDim}" FontSize="9"/>
+                            <TextBlock Text="■ " Foreground="#CC88FF" FontSize="9"/>
+                            <TextBlock Text="Damp/Dis  " Foreground="{StaticResource TextDim}" FontSize="9"/>
+                            <TextBlock Text="■ " Foreground="#4CFFB3" FontSize="9"/>
+                            <TextBlock Text="Logi  " Foreground="{StaticResource TextDim}" FontSize="9"/>
+                            <TextBlock Text="■ " Foreground="#999999" FontSize="9"/>
+                            <TextBlock Text="Paint  " Foreground="{StaticResource TextDim}" FontSize="9"/>
+                            <TextBlock Text="□ " Foreground="#FFD700" FontSize="9"/>
+                            <TextBlock Text="Boss" Foreground="{StaticResource TextDim}" FontSize="9"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <Button Grid.Column="1" Content="Clear" VerticalAlignment="Top"
+                            Click="ClearDetected_Click" Margin="6,0,0,0"
+                            ToolTip="Clear detected NPC list"/>
+                </Grid>
+            </Border>
+
+            <!-- MAIN CONTENT ROW -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="96"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- ===== LEFT PANEL ===== -->
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Timer -->
+                    <TextBlock x:Name="TimerText" Grid.Row="0" Text="20:00"
+                               FontSize="34" FontWeight="Bold" Foreground="{StaticResource TextMain}" Margin="0,0,0,1"/>
+                    <TextBlock x:Name="StatusText" Grid.Row="1" Text="READY"
+                               FontSize="11" Foreground="{StaticResource TextDim}" Margin="0,0,0,1"/>
+                    <TextBlock x:Name="SelectionText" Grid.Row="2" Text="Tier: (none) • Weather: (none)"
+                               FontSize="11" Foreground="{StaticResource TextMain}" Margin="0,0,0,6"/>
+
+                    <Border Grid.Row="3" Style="{StaticResource Divider}"/>
+
+                    <!-- Tier -->
+                    <StackPanel Grid.Row="4" Margin="0,0,0,5">
+                        <TextBlock Text="Tier" Style="{StaticResource Lbl}"/>
+                        <UniformGrid x:Name="TierGrid" Columns="7">
+                            <Button Content="T0" Tag="T0 Tranquil"    Click="TierButton_Click" ToolTip="Tranquil"/>
+                            <Button Content="T1" Tag="T1 Calm"        Click="TierButton_Click" ToolTip="Calm"/>
+                            <Button Content="T2" Tag="T2 Agitated"    Click="TierButton_Click" ToolTip="Agitated"/>
+                            <Button Content="T3" Tag="T3 Fierce"      Click="TierButton_Click" ToolTip="Fierce"/>
+                            <Button Content="T4" Tag="T4 Raging"      Click="TierButton_Click" ToolTip="Raging"/>
+                            <Button Content="T5" Tag="T5 Chaotic"     Click="TierButton_Click" ToolTip="Chaotic"/>
+                            <Button Content="T6" Tag="T6 Cataclysmic" Click="TierButton_Click" ToolTip="Cataclysmic"/>
+                        </UniformGrid>
+                    </StackPanel>
+
+                    <!-- Weather -->
+                    <StackPanel Grid.Row="5" Margin="0,0,0,5">
+                        <TextBlock Text="Weather" Style="{StaticResource Lbl}"/>
+                        <UniformGrid x:Name="WeatherGrid" Columns="5">
+                            <Button Content="⚡ Elec"  Tag="Electrical" Click="WeatherButton_Click"/>
+                            <Button Content="🌀 Exotic" Tag="Exotic"     Click="WeatherButton_Click"/>
+                            <Button Content="🔥 Fire"  Tag="Firestorm"  Click="WeatherButton_Click"/>
+                            <Button Content="☢ Gamma"  Tag="Gamma"      Click="WeatherButton_Click"/>
+                            <Button Content="🌑 Dark"   Tag="Dark"       Click="WeatherButton_Click"/>
+                        </UniformGrid>
+                    </StackPanel>
+
+                    <!-- Rooms -->
+                    <StackPanel Grid.Row="6" Margin="0,0,0,5">
+                        <TextBlock x:Name="RoomText" Text="Room: 0 / 3"
+                                   Foreground="{StaticResource TextMain}" FontSize="11" Margin="0,0,0,3"/>
+                        <UniformGrid Columns="3">
+                            <Button x:Name="R1DoneButton" Content="R1 ✓" Click="R1Done_Click"/>
+                            <Button x:Name="R2DoneButton" Content="R2 ✓" Click="R2Done_Click"/>
+                            <Button x:Name="R3DoneButton" Content="R3 ✓" Click="R3Done_Click"/>
+                        </UniformGrid>
+                    </StackPanel>
+
+                    <!-- Drone damage tracking -->
+                    <StackPanel Grid.Row="7" Margin="0,0,0,5">
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="DroneArmorButton" Content="Drone took armor" Click="DroneArmor_Click" MinWidth="130"/>
+                            <Button x:Name="DroneRepairedButton" Content="Repaired" Click="DroneRepaired_Click"
+                                    Visibility="Collapsed" Margin="4,0,0,0"
+                                    BorderBrush="{StaticResource Success}"
+                                    ToolTip="Click after repairing drones to clear the warning"/>
+                        </StackPanel>
+                        <TextBlock x:Name="DroneReminderText" Text="" Foreground="{StaticResource Warning}"
+                                   FontWeight="SemiBold" Margin="0,3,0,0" FontSize="11"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <!-- Inventory loot tracking -->
+                    <Border Grid.Row="8" Background="#110D1520" BorderBrush="{StaticResource PanelBorder}"
+                            BorderThickness="1" CornerRadius="6" Padding="8,6" VerticalAlignment="Bottom">
+                        <StackPanel>
+                            <TextBlock Text="Loot tracking (M ISK)" Style="{StaticResource Lbl}" Margin="0,0,0,4"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Before:" Foreground="{StaticResource TextDim}" FontSize="10"
+                                           VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                <TextBox x:Name="InvStartTextBox" Grid.Column="1" Style="{StaticResource SmallInput}"
+                                         TextChanged="InvText_Changed"
+                                         ToolTip="Enter your inventory estimated value BEFORE entering the abyss (in millions)"/>
+                                <TextBlock Grid.Column="2" Text="After:" Foreground="{StaticResource TextDim}" FontSize="10"
+                                           VerticalAlignment="Center" Margin="8,0,4,0"/>
+                                <TextBox x:Name="InvEndTextBox" Grid.Column="3" Style="{StaticResource SmallInput}"
+                                         TextChanged="InvText_Changed"
+                                         ToolTip="Enter your inventory estimated value AFTER the run (in millions)"/>
+                                <TextBlock Grid.Column="4" x:Name="InvDeltaText" Text="Δ: --"
+                                           Foreground="{StaticResource Success}" FontWeight="Bold"
+                                           VerticalAlignment="Center" Margin="8,0,0,0" FontSize="11"/>
+                            </Grid>
+                            <TextBlock Text="Check EVE inventory bottom for Est. Price → type value above"
+                                       Foreground="{StaticResource TextDim}" FontSize="9"
+                                       Margin="0,3,0,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- ===== RIGHT PANEL ===== -->
+                <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                    <TextBlock Text="Actions" Style="{StaticResource Lbl}" Margin="0,0,0,4"/>
+                    <Button x:Name="StartButton"  Style="{StaticResource OBtn}"     Content="▶ Start"  Click="Start_Click"/>
+                    <Button x:Name="SubmitButton" Style="{StaticResource SubmitBtn}" Content="✔ Submit" Click="Submit_Click"/>
+                    <Button x:Name="EndNowButton" Style="{StaticResource DangerBtn}" Content="■ End"    Click="EndNow_Click"/>
+
+                    <Border Style="{StaticResource Divider}"/>
+                    <Button x:Name="SetupButton" Content="⚙ Setup" Click="SetupButton_Click"/>
+                    <Button x:Name="HideOverlayButton" Content="✕ Hide" Click="HideOverlay_Click"
+                            Margin="0,2,0,0" Opacity="0.7"
+                            ToolTip="Hide overlay (use Overlay ▶ button in main window to show again)"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
