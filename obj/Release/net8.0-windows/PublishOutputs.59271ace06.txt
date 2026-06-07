@@ -1,6 +1,0 @@
-C:\Users\agnru\Downloads\test1\EveAbyssCompanion.exe
-C:\Users\agnru\Downloads\test1\npc_dataset.json
-C:\Users\agnru\Downloads\test1\EveAbyssCompanion.dll
-C:\Users\agnru\Downloads\test1\EveAbyssCompanion.deps.json
-C:\Users\agnru\Downloads\test1\EveAbyssCompanion.runtimeconfig.json
-C:\Users\agnru\Downloads\test1\EveAbyssCompanion.pdb
